@@ -14,8 +14,8 @@ class Daterangepicker extends Filter
     private bool|string $maxDate = false;
 
     public function __construct(
-        private string $column,
-        private string $default = Helper::TODAY,
+        protected string $column,
+        protected string $default = Helper::TODAY,
     ) {
     }
 
