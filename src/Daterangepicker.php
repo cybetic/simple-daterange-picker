@@ -12,6 +12,7 @@ class Daterangepicker extends Filter
     private array $periods = [];
     private bool|string $minDate = false;
     private bool|string $maxDate = false;
+    private bool $showTime = false;
 
     public function __construct(
         protected string $column,
@@ -24,7 +25,7 @@ class Daterangepicker extends Filter
 
     public function apply(NovaRequest $request, $query, $value)
     {
-        [$start, $end] = Helper::getParsedDatesGroupedRanges($value);
+        [$start, $end] = Helper::getParsedDatesGroupedRanges($value, $this->showTime);
 
         if ($start && $end) {
             $query->whereBetween($this->column, [$start, $end]);
@@ -56,6 +57,7 @@ class Daterangepicker extends Filter
             'customRanges' => json_encode($this->periods),
             'maxDate' => $this->maxDate ?? false,
             'minDate' => $this->minDate ?? false,
+            'showTime' => $this->showTime,
         ];
     }
 
@@ -71,6 +73,13 @@ class Daterangepicker extends Filter
             }
         }
         $this->periods = $result;
+
+        return $this;
+    }
+
+    public function showTime(bool $showTime = true)
+    {
+        $this->showTime = $showTime;
 
         return $this;
     }
@@ -91,9 +100,13 @@ class Daterangepicker extends Filter
 
     public function default(): string
     {
+        $format = 'd-m-Y';
+        if ($this->showTime) {
+            $format .= ' H:i';
+        }
         [$start, $end] = Helper::getParsedDatesGroupedRanges($this->default);
 
-        return $start->format('d-m-Y').' to '.$end->format('d-m-Y');
+        return $start->format($format).' - '.$end->format($format);
     }
 
     public function setName(string $name): self
