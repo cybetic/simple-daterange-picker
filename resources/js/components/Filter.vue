@@ -149,7 +149,6 @@ export default {
       })
           .on('apply.daterangepicker', function(ev, picker) {
             if (ref.currentStartDate && ref.currentEndDate) {
-              // Важно — берем время из picker, а не из parseDates
               ref.currentStartDate = picker.startDate.clone();
               ref.currentEndDate = picker.endDate.clone();
 
