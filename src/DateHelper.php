@@ -28,7 +28,7 @@ class DateHelper
 
     const THIS_YEAR = 'THIS_YEAR';
 
-    public static function getParsedDatesGroupedRanges($value): array
+    public static function getParsedDatesGroupedRanges($value, bool $showTime = false): array
     {
         $start = Carbon::now()->setTime(0, 0, 0);
         $end = $start->clone()->setTime(23, 59, 59);
@@ -70,20 +70,22 @@ class DateHelper
                 $start->startOfYear();
                 break;
             default:
-                $parsed = explode(' to ', $value);
-                if (count($parsed) == 1) {
-                    $start = Carbon::make($value)->setTime(0, 0, 0);
-                    $end = $start->clone()->setTime(23, 59, 59);
-                } elseif (count($parsed) == 2) {
-                    $start = Carbon::make($parsed[0])->setTime(0, 0, 0);
-                    $end = Carbon::make($parsed[1])->setTime(23, 59, 59);
+                $parsed = explode(' - ', $value);
+
+                if (count($parsed) === 1) {
+                    $start = Carbon::make($parsed[0]);
+                    $end = $start->clone();
+                } elseif (count($parsed) === 2) {
+                    $start = Carbon::make($parsed[0]);
+                    $end = Carbon::make($parsed[1]);
                 }
 
+                if (!$showTime) {
+                    $start->setTime(0, 0, 0);
+                    $end->setTime(23, 59, 59);
+                }
         }
 
-        return [
-            $start,
-            $end,
-        ];
+        return [$start, $end];
     }
 }
