@@ -3,6 +3,7 @@
 namespace Rpj\Daterangepicker;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Nova\Filters\Filter;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Rpj\Daterangepicker\DateHelper as Helper;
@@ -13,6 +14,7 @@ class Daterangepicker extends Filter
     private bool|string $minDate = false;
     private bool|string $maxDate = false;
     private bool $showTime = false;
+    private bool $userTimeZone = false;
 
     public function __construct(
         protected string $column,
@@ -26,6 +28,16 @@ class Daterangepicker extends Filter
     public function apply(NovaRequest $request, $query, $value)
     {
         [$start, $end] = Helper::getParsedDatesGroupedRanges($value, $this->showTime);
+
+        $user = Auth::user();
+        dd($this->userTimeZone, $user->timezone);
+        if ($this->userTimeZone && !empty($user->timezone)) {
+            $offset = Carbon::now($user->timezone)->utcOffset();
+            dd($offset);
+            $newstart = $start->copy()->subMinutes($offset);
+            $newend   = $end->copy()->subMinutes($offset);
+        }
+        dd($start, $end, $newstart, $newend);
 
         if ($start && $end) {
             $query->whereBetween($this->column, [$start, $end]);
@@ -80,6 +92,13 @@ class Daterangepicker extends Filter
     public function showTime(bool $showTime = true)
     {
         $this->showTime = $showTime;
+
+        return $this;
+    }
+
+    public function inUserTimeZone()
+    {
+        $this->userTimeZone = true;
 
         return $this;
     }
