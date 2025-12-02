@@ -36,19 +36,19 @@ class Daterangepicker extends Filter
     {
         if (empty($this->periods)) {
             $this->setPeriods([
-                'Today' => [Carbon::today(), Carbon::today()],
-                'Yesterday' => [Carbon::yesterday(), Carbon::yesterday()],
+                'Today' => [Carbon::today()->startOfDay(), Carbon::today()->endOfDay()],
+                'Yesterday' => [Carbon::yesterday()->startOfDay(), Carbon::yesterday()->endOfDay()],
                 'This week' => [
-                    Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek(),
+                    Carbon::now()->startOfWeek()->startOfDay(), Carbon::now()->endOfWeek()->endOfDay(),
                 ],
-                'Last 7 days' => [Carbon::now()->subDays(6), Carbon::now()],
-                'Last 30 days' => [Carbon::now()->subDays(29), Carbon::now()],
+                'Last 7 days' => [Carbon::now()->subDays(6)->startOfDay(), Carbon::now()->endOfDay()],
+                'Last 30 days' => [Carbon::now()->subDays(29)->startOfDay(), Carbon::now()->endOfDay()],
                 'This month' => [
-                    Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth(),
+                    Carbon::now()->startOfMonth()->startOfDay(), Carbon::now()->endOfMonth()->endOfDay(),
                 ],
                 'Last month' => [
-                    Carbon::now()->subMonth()->startOfMonth(),
-                    Carbon::now()->subMonth()->endOfMonth(),
+                    Carbon::now()->subMonth()->startOfMonth()->startOfDay(),
+                    Carbon::now()->subMonth()->endOfMonth()->endOfDay(),
                 ],
             ]);
         }
