@@ -28,6 +28,9 @@ class DateHelper
 
     const THIS_YEAR = 'THIS_YEAR';
 
+    /**
+     * @return Carbon[]
+     */
     public static function getParsedDatesGroupedRanges($value, bool $showTime = false): array
     {
         $start = Carbon::now()->setTime(0, 0, 0);
@@ -85,6 +88,9 @@ class DateHelper
                     $end->setTime(23, 59, 59);
                 }
         }
+
+        $start->setSecond(0);
+        $end->setSecond(59);
 
         return [$start, $end];
     }
