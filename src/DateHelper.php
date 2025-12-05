@@ -73,6 +73,7 @@ class DateHelper
                 $start->startOfYear();
                 break;
             default:
+                $value = str_replace(' to ', ' - ', $value);
                 $parsed = explode(' - ', $value);
 
                 if (count($parsed) === 1) {
