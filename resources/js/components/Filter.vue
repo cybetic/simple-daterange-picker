@@ -133,6 +133,7 @@ export default {
       $(idSelector).daterangepicker({
         timePicker: ref.showTime,
         timePicker24Hour: true,
+        singleDatePicker: true,
         startDate: ref.currentStartDate,
         endDate: ref.currentEndDate,
         maxDate: ref.maxDate,
