@@ -117,7 +117,7 @@ export default {
 
       this.$store.commit(`${this.resourceName}/updateFilterState`, {
         filterClass: this.filterKey,
-        value: this.currentStartDate.format(format) + ' - ' + this.currentEndDate.format(format),
+        value: this.singleDate ? this.currentStartDate.format(format)  : this.currentStartDate.format(format) + ' - ' + this.currentEndDate.format(format),
       });
 
       this.$emit('change');
