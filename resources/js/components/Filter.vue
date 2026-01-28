@@ -50,6 +50,7 @@ export default {
     maxDate: null,
     minDate: null,
     showTime: null,
+    singleDate: null,
   }),
 
   created() {
@@ -106,6 +107,7 @@ export default {
           false;
 
       this.showTime = this.filter.options.find(opt => opt.label === 'showTime').value;
+      this.singleDate = this.filter.options.find(opt => opt.label === 'singleDate').value;
     },
     setCurrentFilterValue() {
       this.value = this.filter.currentValue;
@@ -115,7 +117,7 @@ export default {
 
       this.$store.commit(`${this.resourceName}/updateFilterState`, {
         filterClass: this.filterKey,
-        value: this.currentStartDate.format(format) + ' - ' + this.currentEndDate.format(format),
+        value: this.singleDate ? this.currentStartDate.format(format)  : this.currentStartDate.format(format) + ' - ' + this.currentEndDate.format(format),
       });
 
       this.$emit('change');
@@ -133,6 +135,7 @@ export default {
       $(idSelector).daterangepicker({
         timePicker: ref.showTime,
         timePicker24Hour: true,
+        singleDatePicker: ref.singleDate,
         startDate: ref.currentStartDate,
         endDate: ref.currentEndDate,
         maxDate: ref.maxDate,
