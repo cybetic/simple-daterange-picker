@@ -13,12 +13,13 @@ class Daterangepicker extends Filter
     private bool|string $minDate = false;
     private bool|string $maxDate = false;
     private bool $showTime = false;
-    private bool $singleDate = false;
 
     public function __construct(
         protected string $column,
         protected string $default = Helper::TODAY,
+        array $periods = []
     ) {
+        $this->setPeriods($periods);
     }
 
     public $component = 'daterangepicker';
@@ -59,7 +60,6 @@ class Daterangepicker extends Filter
             'maxDate' => $this->maxDate ?? false,
             'minDate' => $this->minDate ?? false,
             'showTime' => $this->showTime,
-            'singleDate' => $this->singleDate,
         ];
     }
 
@@ -114,13 +114,6 @@ class Daterangepicker extends Filter
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function singleDate(): self
-    {
-        $this->singleDate = true;
 
         return $this;
     }
